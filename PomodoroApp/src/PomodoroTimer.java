@@ -1,19 +1,19 @@
 import javax.swing.Timer;
-import java.awt.*;
+
 
 import java.awt.event.*;
-import javax.swing.BorderFactory;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
+
 
 
 public class PomodoroTimer    {
 
 JFrame frame = new JFrame();
 JButton startButton = new JButton("START");
-JButton resetButton = new JButton("RESET");
+
 JLabel timeLabel = new JLabel();
 int totalTimeInSeconds = 120;
 int elapsedTime = 0;
@@ -37,7 +37,7 @@ Timer timer = new Timer(1000, new ActionListener() {
             remainingTime--;
         } else {
             System.out.println("Tempo esgotado!");
-            ((Timer) e.getSource()).stop(); // Para o timer
+            ((Timer) e.getSource()).stop(); 
         }
     }
 });
@@ -52,12 +52,12 @@ public PomodoroTimer() {
     timeLabel.setBounds(100, 50, 100, 50);
     timeLabel.setText(minutes_string + ":" + seconds_string);
     startButton.setBounds(50, 120, 100, 50);
-    resetButton.setBounds(150, 120, 100, 50);
+  
 
     // Adicionando componentes ao frame
     frame.add(timeLabel);
     frame.add(startButton);
-    frame.add(resetButton);
+   
 
     // Ação do botão START
     startButton.addActionListener(new ActionListener() {
@@ -75,19 +75,6 @@ public PomodoroTimer() {
         }
     });
 
-    // Ação do botão RESET
-    resetButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            timer.stop();
-            started = false;
-      
-            seconds_string = String.format("%02d", totalTimeInSeconds % 60);
-            minutes_string = String.format("%02d", totalTimeInSeconds / 60);
-            timeLabel.setText(minutes_string + ":" + seconds_string);
-            startButton.setText("START");
-        }
-    });
 
     frame.setVisible(true);
 }
