@@ -2,6 +2,11 @@ package Main;
 
 
 import javax.swing.Timer;
+
+import Strategy.BreakStrategy;
+import Strategy.FocusStrategy;
+import Strategy.Strategy;
+
 import java.awt.event.*;
 
 import javax.swing.JButton;
@@ -12,18 +17,20 @@ import javax.swing.JLabel;
 
 public class PomodoroTimer    {
 
+private Strategy strategy;
+
 private JFrame frame = new JFrame();
 private JButton startButton = new JButton("START");
 private JButton resetButton = new JButton("Reset");
 private boolean started = false;
-
+private boolean paused = false;
 
 JLabel timeLabel = new JLabel();
 
 int elapsedTime = 0;
 int seconds = 0;
 int minutes = 0;
-int remainingTime = 5;
+int remainingTime;
 
 String seconds_string = String.format("%02d", seconds);
 String minutes_string = String.format("%02d", minutes);
@@ -41,14 +48,16 @@ Timer timer = new Timer(1000, new ActionListener() {
             timeLabel.setText(minutes_string + ":" + seconds_string);
             remainingTime--;
         } else {
-        remainingTime = 10;
+             toggleStrategies();
         timer.restart();
         }
     }
 });
 
 public PomodoroTimer() {
-    
+   
+    strategy = new FocusStrategy();
+
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(300, 200);
     frame.setLayout(null);
@@ -64,13 +73,11 @@ public PomodoroTimer() {
     frame.add(resetButton);
 
    
-  
-
-
     frame.setVisible(true);
 }
 
 public void start() {
+    strategy.ExecuteStrategy(this);
     timer.start();
 }
 
@@ -79,8 +86,19 @@ public void stop(){
 }
 
 public void reset(){
-    remainingTime = 10;
+    if(paused){
+        paused = false;
+        started = true;
+        startButton.setText("PAUSE");
+    }
+    strategy = new FocusStrategy();
+    strategy.ExecuteStrategy(this);
     timer.restart();
+}
+
+public void restart(){
+
+    timer.start();
 }
 
 public JButton getStartButton(){
@@ -91,6 +109,27 @@ public JButton getResetButton(){
     return resetButton;
 }
 
+public JFrame getFrame(){
+    return this.frame;
+}
+
+public void setRemainingTime(int remainingTime){
+    this.remainingTime = remainingTime;
+}
+
+public void toggleStrategies( ){
+
+    if(this.strategy instanceof FocusStrategy){
+        strategy = new BreakStrategy();
+    }
+    else if(this.strategy instanceof BreakStrategy){
+        strategy = new FocusStrategy();
+    }
+
+    strategy.ExecuteStrategy(this);
+
+}
+
 public void setStarted(boolean b){
 this.started = b;
 }
@@ -99,6 +138,13 @@ public boolean getStarted(){
     return this.started;
 }
 
+public void setPaused(boolean b){
+    this.paused = b;
+    }
+    
+    public boolean getPaused(){
+        return this.paused;
+    }
 
 
 }

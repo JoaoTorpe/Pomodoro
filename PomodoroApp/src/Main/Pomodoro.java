@@ -7,6 +7,7 @@ import javax.swing.JButton;
 
 import Command.Command;
 import Command.ResetCommand;
+import Command.RestartCommand;
 import Command.StartCommand;
 import Command.StopCommand;
 
@@ -17,6 +18,7 @@ public class Pomodoro {
     private Command start;
     private Command stop;
     private Command reset;
+    private Command restart;
 
     private JButton startButton;
     private JButton resetButton;
@@ -26,13 +28,27 @@ public class Pomodoro {
         this.timer = timer;
         this.startButton = timer.getStartButton();
         this.resetButton = timer.getResetButton();
+
         this.start = new StartCommand();
         this.stop = new StopCommand();
         this.reset = new ResetCommand();
+        this.restart = new RestartCommand();
 
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                if(timer.getPaused()){
+                    restart();
+                    timer.setPaused(false);
+                    timer.setStarted(true);
+                    startButton.setText("PAUSE");
+
+                }
+
+            else{
+
+
                 if (!timer.getStarted()) {
                     start();
                   timer.setStarted(true);
@@ -40,8 +56,13 @@ public class Pomodoro {
                 } else {
                     stop();
                    timer.setStarted(false);
+                   timer.setPaused(true);
                     startButton.setText("START");
                 }
+
+            }
+
+
             }
         });
 
@@ -71,6 +92,9 @@ public class Pomodoro {
 
     public void reset(){
         reset.execute(timer);
+    }
+    public void restart(){
+        restart.execute(timer);
     }
     
 }
