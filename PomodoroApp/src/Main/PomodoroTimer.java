@@ -8,17 +8,21 @@ import Strategy.FocusStrategy;
 import Strategy.Strategy;
 
 import java.awt.event.*;
+import java.io.IOException;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
+import java.util.*;
+import Observer.*;
 
 
 public class PomodoroTimer    {
 
 private Strategy strategy;
-
+private List<Subscriber> subscribers;
 private JFrame frame = new JFrame();
 private JButton startButton = new JButton("START");
 private JButton resetButton = new JButton("Reset");
@@ -55,7 +59,7 @@ Timer timer = new Timer(1000, new ActionListener() {
 });
 
 public PomodoroTimer() {
-   
+   subscribers = new ArrayList<>();
     strategy = new FocusStrategy();
 
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,6 +78,25 @@ public PomodoroTimer() {
 
    
     frame.setVisible(true);
+}
+
+public void notifySubscribers() {
+
+    for(Subscriber s : subscribers){
+        try {
+            s.update();
+        } catch (UnsupportedAudioFileException e) {
+            
+            e.printStackTrace();
+        } catch (IOException e) {
+            
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            
+            e.printStackTrace();
+        }
+    }
+
 }
 
 public void start() {
@@ -118,6 +141,9 @@ public void setRemainingTime(int remainingTime){
 }
 
 public void toggleStrategies( ){
+        
+    notifySubscribers();
+   
 
     if(this.strategy instanceof FocusStrategy){
         strategy = new BreakStrategy();
@@ -128,6 +154,10 @@ public void toggleStrategies( ){
 
     strategy.ExecuteStrategy(this);
 
+}
+
+public void addSubscriber(Subscriber s){
+    subscribers.add(s);
 }
 
 public void setStarted(boolean b){
