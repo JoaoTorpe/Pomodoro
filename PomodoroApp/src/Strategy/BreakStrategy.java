@@ -7,8 +7,9 @@ public class BreakStrategy implements Strategy{
 int timeInSeconds = 5;
     @Override
     public void ExecuteStrategy(PomodoroTimer timer) {
-        timer.getFrame().getContentPane().setBackground(Color.green);
+
         timer.setRemainingTime(timeInSeconds);
+        timer.getFrame().getContentPane().setBackground(Color.green);
     }
 
     
