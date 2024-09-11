@@ -13,7 +13,7 @@ import javax.sound.sampled.LineEvent;
 public class SoundService implements Subscriber {
     
     
-    private String filePath = "src/Observer/Sounds/notification-sound.wav";
+    private String filePath = "PomodoroApp/src/Observer/Sounds/notification-sound.wav";
 
 
     @Override
