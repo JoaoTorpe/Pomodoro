@@ -2,7 +2,12 @@ package Main;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import Observer.Subscriber;
+
 import javax.swing.*;
+
+import Observer.PopUpService;
+import Observer.SoundService;
 
 public class TimeSettingsWindow extends JFrame {
 
@@ -11,6 +16,9 @@ public class TimeSettingsWindow extends JFrame {
     private JTextField breakTimeField;
     private JCheckBox soundCheckBox;
     private JCheckBox popupCheckBox;
+
+    private Subscriber popUpService = PopUpService.getPopUpServiceInstance();
+    private Subscriber audioService = SoundService.getSoundServiceInstance();
 
     public TimeSettingsWindow(PomodoroTimer timer) {
         this.timer = timer;
@@ -41,12 +49,12 @@ public class TimeSettingsWindow extends JFrame {
 
         soundCheckBox = new JCheckBox("Play sound");
         soundCheckBox.setBounds(20, 100, 100, 25);
-        soundCheckBox.setSelected(false); // Define o estado inicial com base no timer
+        soundCheckBox.setSelected(timer.isSoundEnable()); // Define o estado inicial com base no timer
         add(soundCheckBox);
 
         popupCheckBox = new JCheckBox("Show popup");
         popupCheckBox.setBounds(140, 100, 120, 25);
-        popupCheckBox.setSelected(timer.isPopupEnabled()); // Define o estado inicial com base no timer
+        popupCheckBox.setSelected(timer.isPopupEnable()); // Define o estado inicial com base no timer
         add(popupCheckBox);
 
         JButton applyButton = new JButton("Apply");
@@ -90,6 +98,25 @@ public class TimeSettingsWindow extends JFrame {
             // Configurações do som e do popup
             timer.setSoundEnabled(soundCheckBox.isSelected());
             timer.setPopupEnabled(popupCheckBox.isSelected());
+
+          
+
+            if(timer.isPopupEnable() ){
+               timer.addSubscriber(popUpService);
+            }
+            else{
+              timer.removeSubscriber(popUpService);
+            }
+
+            if(timer.isSoundEnable()){
+               
+               timer.addSubscriber(audioService);
+            }
+
+            else{
+              
+               timer.removeSubscriber(audioService);
+            }
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Invalid input. Please enter valid numbers.");
