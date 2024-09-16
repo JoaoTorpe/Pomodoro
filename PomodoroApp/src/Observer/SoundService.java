@@ -11,8 +11,9 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class SoundService implements Subscriber {
 
-    private String filePath = "PomodoroApp/src/Observer/Sounds/notification-sound.wav";
-
+    private String filePath = "src/Observer/Sounds/notification-sound.wav";
+    
+    
     @Override
     public void update() throws UnsupportedAudioFileException,
             IOException, LineUnavailableException {
