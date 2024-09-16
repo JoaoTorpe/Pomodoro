@@ -24,8 +24,17 @@ public class PomodoroTimer {
     private boolean started = false;
     private boolean paused = false;
 
-    private boolean soundEnabled = false;
-    private boolean popupEnabled = false;
+    private boolean soundEnable;
+    private boolean popupEnable; 
+    
+    public boolean isSoundEnable() {
+        return soundEnable;
+    }
+
+    public boolean isPopupEnable() {
+        return popupEnable;
+    }
+   
 
     JLabel timeLabel = new JLabel();
 
@@ -79,50 +88,28 @@ public class PomodoroTimer {
 
     public void notifySubscribers() {
 
-        if (soundEnabled) {
+       
             for (Subscriber s : subscribers) {
-                try {
-                    s.update();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                
+                    try {
+                        s.update();
+                    } catch (UnsupportedAudioFileException e) {
+                        
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        
+                        e.printStackTrace();
+                    } catch (LineUnavailableException e) {
+                        
+                        e.printStackTrace();
+                    }   
             }
-            playSound();
-        }
+          
+        
 
-        if (popupEnabled) {
-            showPopup();
-        }
     }
 
-    private void playSound() {
-        try {
-            new SoundService().update();
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-            ex.printStackTrace();
-        }
-    }
 
-    private void showPopup() {
-        JOptionPane.showMessageDialog(frame, "O tempo acabou!");
-    }
-
-    // Getters e Setters para as novas configurações
-    public boolean isSoundEnabled() {
-        return soundEnabled;
-    }
-
-    public void setSoundEnabled(boolean soundEnabled) {
-        this.soundEnabled = soundEnabled;
-    }
-
-    public boolean isPopupEnabled() {
-        return popupEnabled;
-    }
-
-    public void setPopupEnabled(boolean popupEnabled) {
-        this.popupEnabled = popupEnabled;
-    }
 
     public void start() {
         state.executeState(this);
@@ -191,8 +178,20 @@ public class PomodoroTimer {
     }
 
     public void addSubscriber(Subscriber s) {
+       if(!subscribers.contains(s)){
         subscribers.add(s);
+       }
+
     }
+
+    public void removeSubscriber(Subscriber s) {
+     
+       if(subscribers.contains(s)){
+        subscribers.remove(s);
+       }
+        
+    }
+
 
     public void setStarted(boolean b) {
         this.started = b;
@@ -209,4 +208,13 @@ public class PomodoroTimer {
     public boolean getPaused() {
         return this.paused;
     }
+
+    public void setSoundEnabled(boolean selected) {
+        this.soundEnable = selected;
+    }
+
+    public void setPopupEnabled(boolean selected) {
+        this.popupEnable = selected;
+    }
+
 }
