@@ -78,15 +78,15 @@ public class PomodoroTimer {
     }
 
     public void notifySubscribers() {
-        for (Subscriber s : subscribers) {
-            try {
-                s.update();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
         if (soundEnabled) {
+            for (Subscriber s : subscribers) {
+                try {
+                    s.update();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             playSound();
         }
 
