@@ -1,14 +1,16 @@
 package Main;
 
+import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.event.*;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import java.util.*;
+
 import Observer.*;
 import State.FocusState;
 import State.State;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
 
 public class PomodoroTimer {
 
@@ -22,23 +24,21 @@ public class PomodoroTimer {
     private boolean started = false;
     private boolean paused = false;
 
+    private boolean soundEnabled = false;
+    private boolean popupEnabled = false;
+
     JLabel timeLabel = new JLabel();
 
     int seconds = 0;
     int minutes = 0;
     int remainingTime;
 
-//    int focusTimeInSeconds = 25 * 60; // Tempo padrão de foco (25 minutos)
-//    int breakTimeInSeconds = 5 * 60;  // Tempo padrão de pausa (5 minutos)
-
     int focusTimeInSeconds = 10;
     int breakTimeInSeconds = 5;
 
     String seconds_string = String.format("%02d", seconds);
     String minutes_string = String.format("%02d", minutes);
-
     Timer timer = new Timer(1000, new ActionListener() {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             if (remainingTime >= 0) {
@@ -49,8 +49,9 @@ public class PomodoroTimer {
                 timeLabel.setText(minutes_string + ":" + seconds_string);
                 remainingTime--;
             } else {
-                toggleState();
-                timer.restart();
+                timer.stop(); // Para o timer atual
+                toggleState(); // Alterna o estado do Pomodoro
+                timer.start(); // Inicia o timer novamente com o novo estado
             }
         }
     });
@@ -84,6 +85,43 @@ public class PomodoroTimer {
                 e.printStackTrace();
             }
         }
+
+        if (soundEnabled) {
+            playSound();
+        }
+
+        if (popupEnabled) {
+            showPopup();
+        }
+    }
+
+    private void playSound() {
+        try {
+            new SoundService().update();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void showPopup() {
+        JOptionPane.showMessageDialog(frame, "O tempo acabou!");
+    }
+
+    // Getters e Setters para as novas configurações
+    public boolean isSoundEnabled() {
+        return soundEnabled;
+    }
+
+    public void setSoundEnabled(boolean soundEnabled) {
+        this.soundEnabled = soundEnabled;
+    }
+
+    public boolean isPopupEnabled() {
+        return popupEnabled;
+    }
+
+    public void setPopupEnabled(boolean popupEnabled) {
+        this.popupEnabled = popupEnabled;
     }
 
     public void start() {
