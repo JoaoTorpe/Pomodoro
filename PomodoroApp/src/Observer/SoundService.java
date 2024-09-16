@@ -11,6 +11,16 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class SoundService implements Subscriber {
 
+    private static SoundService soundService = null;
+   
+    public static SoundService getSoundServiceInstance(){
+        if(soundService != null){
+            return soundService;
+        }
+        soundService = new SoundService();
+        return soundService;
+    }
+
     private String filePath = "src/Observer/Sounds/notification-sound.wav";
     
     
