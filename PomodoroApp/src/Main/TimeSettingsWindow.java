@@ -1,12 +1,12 @@
 package Main;
 
+import Observer.PopUpService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import Observer.Subscriber;
 
 import javax.swing.*;
 
-import Observer.PopUpService;
 import Observer.SoundService;
 
 public class TimeSettingsWindow extends JFrame {
