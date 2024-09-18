@@ -21,8 +21,9 @@ public class SoundService implements Subscriber {
         return soundService;
     }
 
-    private String filePath = "src/Observer/Sounds/notification-sound.wav";
     
+    private String filePath = new File("PomodoroApp/src/Observer/Sounds/notification-sound.wav").getAbsolutePath();
+
     
     @Override
     public void update() throws UnsupportedAudioFileException,
