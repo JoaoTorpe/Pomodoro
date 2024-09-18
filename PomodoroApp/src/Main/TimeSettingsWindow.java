@@ -1,14 +1,24 @@
 package Main;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import Observer.Subscriber;
+
+import javax.swing.*;
+
+import Observer.PopUpService;
+import Observer.SoundService;
 
 public class TimeSettingsWindow extends JFrame {
 
     private PomodoroTimer timer;
     private JTextField focusTimeField;
     private JTextField breakTimeField;
+    private JCheckBox soundCheckBox;
+    private JCheckBox popupCheckBox;
+
+    private Subscriber popUpService = PopUpService.getPopUpServiceInstance();
+    private Subscriber audioService = SoundService.getSoundServiceInstance();
 
     public TimeSettingsWindow(PomodoroTimer timer) {
         this.timer = timer;
@@ -17,7 +27,7 @@ public class TimeSettingsWindow extends JFrame {
 
     private void setupUI() {
         setTitle("Settings");
-        setSize(300, 200);
+        setSize(300, 250);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
 
@@ -37,12 +47,22 @@ public class TimeSettingsWindow extends JFrame {
         breakTimeField.setBounds(180, 60, 80, 25);
         add(breakTimeField);
 
+        soundCheckBox = new JCheckBox("Play sound");
+        soundCheckBox.setBounds(20, 100, 100, 25);
+        soundCheckBox.setSelected(timer.isSoundEnable()); // Define o estado inicial com base no timer
+        add(soundCheckBox);
+
+        popupCheckBox = new JCheckBox("Show popup");
+        popupCheckBox.setBounds(140, 100, 120, 25);
+        popupCheckBox.setSelected(timer.isPopupEnable()); // Define o estado inicial com base no timer
+        add(popupCheckBox);
+
         JButton applyButton = new JButton("Apply");
-        applyButton.setBounds(20, 100, 100, 30);
+        applyButton.setBounds(20, 140, 100, 30);
         add(applyButton);
 
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.setBounds(140, 100, 100, 30);
+        cancelButton.setBounds(140, 140, 100, 30);
         add(cancelButton);
 
         applyButton.addActionListener(new ActionListener() {
@@ -74,6 +94,30 @@ public class TimeSettingsWindow extends JFrame {
             if (breakMinutes > 0) {
                 timer.setBreakTime(breakMinutes * 60);
             }
+
+            // Configurações do som e do popup
+            timer.setSoundEnabled(soundCheckBox.isSelected());
+            timer.setPopupEnabled(popupCheckBox.isSelected());
+
+          
+
+            if(timer.isPopupEnable() ){
+               timer.addSubscriber(popUpService);
+            }
+            else{
+              timer.removeSubscriber(popUpService);
+            }
+
+            if(timer.isSoundEnable()){
+               
+               timer.addSubscriber(audioService);
+            }
+
+            else{
+              
+               timer.removeSubscriber(audioService);
+            }
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Invalid input. Please enter valid numbers.");
         }
