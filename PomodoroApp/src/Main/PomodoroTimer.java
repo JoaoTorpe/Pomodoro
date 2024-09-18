@@ -100,7 +100,7 @@ public class PomodoroTimer {
 
         resetButton.setBounds(200, 120, 100, 50);
         resetButton.setFont(new Font("Arial", Font.BOLD, 14));
-        resetButton.setBackground(new Color(244, 67, 54));
+        resetButton.setBackground(Color.decode("#7e0de0"));
         resetButton.setForeground(Color.WHITE);
         resetButton.setFocusPainted(false);
         resetButton.setBorder(BorderFactory.createEmptyBorder());
