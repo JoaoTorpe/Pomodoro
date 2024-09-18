@@ -6,6 +6,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JOptionPane;
 
+import Main.PomodoroTimer;
+
 public class PopUpService implements Subscriber {
     private static PopUpService popService = null;
    
@@ -19,7 +21,9 @@ public class PopUpService implements Subscriber {
 
     @Override
     public void update() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        JOptionPane.showMessageDialog(null, "Modo alterado !");
+        if( PomodoroTimer.cycleCount !=0 && PomodoroTimer.cycleCount %2 ==0){
+        JOptionPane.showMessageDialog(null, "Parabéns, você completou um Pomodoro !");
+        }
     }
     
 }

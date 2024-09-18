@@ -14,6 +14,8 @@ import java.io.IOException;
 
 public class PomodoroTimer {
 
+    public static int cycleCount = 1;
+
     private State state;
     private List<Subscriber> subscribers;
     private JFrame frame = new JFrame();
@@ -129,6 +131,7 @@ public class PomodoroTimer {
         state = new FocusState();
         state.executeState(this);
         timer.restart();
+        cycleCount = 1;
     }
 
     public void restart() {
@@ -143,6 +146,7 @@ public class PomodoroTimer {
         notifySubscribers();
         state = state.nextState();
         state.executeState(this);
+        cycleCount ++;
     }
 
     public int getFocusTime() {
