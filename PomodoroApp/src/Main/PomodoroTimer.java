@@ -3,7 +3,10 @@ package Main;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.event.*;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.Font;
 
 import Observer.*;
 import State.FocusState;
@@ -72,19 +75,48 @@ public class PomodoroTimer {
         state = new FocusState(); // Estado inicial
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 300);
+        frame.setSize(400, 300);
         frame.setLayout(null);
 
-        timeLabel.setBounds(100, 50, 100, 50);
+        // Estilo do frame
+        frame.getContentPane().setBackground(new Color(250, 250, 250));
+
+        
+
+        // Estilo do JLabel (tempo)
+        timeLabel.setBounds(150, 50, 100, 50);
+        timeLabel.setFont(new Font("Arial", Font.BOLD, 36));
+        timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        timeLabel.setForeground(new Color(50, 50, 50));
         timeLabel.setText(minutes_string + ":" + seconds_string);
-        startButton.setBounds(50, 120, 100, 50);
-        resetButton.setBounds(150, 120, 100, 50);
-        settingsButton.setBounds(50, 180, 200, 50);
+
+        // Estilo dos botões
+        startButton.setBounds(100, 120, 100, 50);
+        startButton.setFont(new Font("Arial", Font.BOLD, 14));
+        startButton.setBackground(new Color(0, 150, 136));
+        startButton.setForeground(Color.WHITE);
+        startButton.setFocusPainted(false);
+        startButton.setBorder(BorderFactory.createEmptyBorder());
+
+        resetButton.setBounds(200, 120, 100, 50);
+        resetButton.setFont(new Font("Arial", Font.BOLD, 14));
+        resetButton.setBackground(new Color(244, 67, 54));
+        resetButton.setForeground(Color.WHITE);
+        resetButton.setFocusPainted(false);
+        resetButton.setBorder(BorderFactory.createEmptyBorder());
+
+        settingsButton.setBounds(100, 180, 200, 50);
+        settingsButton.setFont(new Font("Arial", Font.BOLD, 14));
+        settingsButton.setBackground(new Color(33, 150, 243));
+        settingsButton.setForeground(Color.WHITE);
+        settingsButton.setFocusPainted(false);
+        settingsButton.setBorder(BorderFactory.createEmptyBorder());
 
         frame.add(timeLabel);
         frame.add(startButton);
         frame.add(resetButton);
         frame.add(settingsButton);
+
         frame.setVisible(true);
     }
 
