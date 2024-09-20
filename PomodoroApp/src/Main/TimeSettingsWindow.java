@@ -20,9 +20,10 @@ public class TimeSettingsWindow extends JFrame {
     private Subscriber popUpService = PopUpService.getPopUpServiceInstance();
     private Subscriber audioService = SoundService.getSoundServiceInstance();
 
-    public TimeSettingsWindow(PomodoroTimer timer) {
+    public TimeSettingsWindow(PomodoroTimer timer, JFrame parentFrame) {
         this.timer = timer;
         setupUI();
+        setLocationRelativeTo(parentFrame);
     }
 
     private void setupUI() {
@@ -30,6 +31,7 @@ public class TimeSettingsWindow extends JFrame {
         setSize(300, 250);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
+        setResizable(false);
 
         JLabel focusTimeLabel = new JLabel("Focus Time (minutes):");
         focusTimeLabel.setBounds(20, 20, 150, 25);

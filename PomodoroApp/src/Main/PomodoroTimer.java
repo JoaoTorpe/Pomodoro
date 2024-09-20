@@ -77,6 +77,7 @@ public class PomodoroTimer {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
         frame.setLayout(null);
+        frame.setResizable(false);
 
         // Estilo do frame
         frame.getContentPane().setBackground(new Color(250, 250, 250));

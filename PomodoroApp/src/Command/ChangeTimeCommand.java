@@ -9,8 +9,8 @@ public class ChangeTimeCommand implements Command {
 
     @Override
     public void execute(PomodoroTimer timer) {
-        // Abre a janela de configuração
-        new TimeSettingsWindow(timer);
+
+        new TimeSettingsWindow(timer, timer.getFrame());
     }
 }
 
