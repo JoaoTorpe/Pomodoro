@@ -2,6 +2,8 @@ package Observer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -22,15 +24,18 @@ public class SoundService implements Subscriber {
     }
 
     
-    private String filePath = new File("PomodoroApp/src/Observer/Sounds/notification-sound.wav").getAbsolutePath();
-
-    
+       
     @Override
     public void update() throws UnsupportedAudioFileException,
             IOException, LineUnavailableException {
         try {
 
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+          try (InputStream audioSrc = getClass().getResourceAsStream("/Observer/Sounds/notification-sound.wav")) {
+            if (audioSrc == null) {
+                throw new IOException("Arquivo de som não encontrado.");
+            }
+        
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioSrc);
 
             Clip audioClip = AudioSystem.getClip();
 
@@ -47,7 +52,7 @@ public class SoundService implements Subscriber {
                     }
                 }
             });
-
+        }
         } catch (UnsupportedAudioFileException | IOException e) {
             e.printStackTrace();
         }
